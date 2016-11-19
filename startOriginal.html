@@ -1,7 +1,7 @@
-          <!DOCTYPE html>
+<!DOCTYPE html>
     <html>
     <head>
-        <title>Getting Started with Three.js</title>    
+        <title>Ich kann nicht mehr.js</title>    
         <script src="../../build/three.js"></script>
 
         <script>
@@ -23,14 +23,14 @@
         function Lines(yDest, offset, material2){
             //summon a geometry object
              var geometryP2 = new THREE.Geometry();
-             offset=((12/12)/2);
+             offset=((12/20)/2);
              yDest-=offset;
 
              //summon the vector lines with fixed x coordinates and moving y coordinates
              //p1: scr address
              geometryP2.vertices.push(new THREE.Vector3(-4, yDest, 0));
              //p2: dest address
-             geometryP2.vertices.push(new THREE.Vector3(0, yDest+1, 0));
+             geometryP2.vertices.push(new THREE.Vector3(0, 0, 0));
              //p3: dest port
              geometryP2.vertices.push(new THREE.Vector3(4, yDest, 0));
             //summon the line
@@ -106,6 +106,72 @@
             var size = flow.keys();
             return size.lenght();
         }
+        //alternativa para dibujar las líneas, solo funciona con un arreglo p.e. {1,2,5,  1,3,5, ...}
+        function linesAlt(coordinates, offSet1, offSet2, offSet3, size1, size2, size3){
+        yDest=3;
+        for (var i=0; i<size1-2; i+3){
+            if(coordinates[i]==undefined){
+                coordinates[i]=yDest;
+            }
+                geometryP2.vertices.push(new THREE.Vector3(-4, coordinates[i], 0));
+                yDest-=offset1;
+            }
+        for (var i=1; i<size2-1; i+3){
+            if(coordinates[i]==undefined){
+                coordinates[i]=yDest;
+            }
+                geometryP2.vertices.push(new THREE.Vector3(-4, coordinates[i], 0));
+                yDest-=offset2;
+            }
+        for (var i=2; i<size3; i+3){
+            if(coordinates[i]==undefined){
+                coordinates[i]=yDest;
+            }
+                geometryP2.vertices.push(new THREE.Vector3(-4, coordinates[i], 0));
+                yDest-=offset3;
+            }
+        }
+
+        function textOff1(size, textOffset){
+
+            text1 = document.createElement('div');
+            text1.style.position = 'absolute';
+            text1.style.width = 100;
+            text1.style.height = 100;
+            text1.style.backgroundColor = "white";
+            text1.innerHTML = "hi there!";
+            text1.style.top = (870-textOffset) + 'px'; 
+            text1.style.left = 0 + 'px';
+            
+            return text1;  
+    }
+        function textOff2(size, textOffset){
+
+            text2 = document.createElement('div');
+            text2.style.position = 'absolute';
+            text2.style.width = 100;
+            text2.style.height = 100;
+            text2.style.backgroundColor = "white";
+            text2.innerHTML = "hi there!";
+            text2.style.top = (870-textOffset) + 'px'; 
+            text2.style.left = 830 + 'px';
+            
+            return text2;  
+    }
+
+            function textOff3(size, textOffset){
+
+            text3 = document.createElement('div');
+            text3.style.position = 'absolute';
+            text3.style.width = 100;
+            text3.style.height = 100;
+            text3.style.backgroundColor = "white";
+            text3.innerHTML = "hi there!";
+            text3.style.top = (870-textOffset) + 'px'; 
+            text3.style.left = 1660 + 'px';
+            
+            return text3;  
+    }
 
 //===================================END OF CUSTOM FUNCTIONS=================================================
 
@@ -160,7 +226,7 @@
         //holds the result of the function call
          var result;
         //iterates per flow
-         for(var i=0; i<12; i++){
+         for(var i=0; i<20; i++){
         //function call
            result =Lines(yDest, offset, material2);
         //adds the line to the scene
@@ -173,6 +239,35 @@
        //Adds the permanent lines
         scene.add(line);
         scene.add(line2);
+
+        //text preformance
+        var text1;
+        var text2;
+        var text3;
+        var off1=(850/20);
+        var textOffset1=off1;
+        var off2=(850/2);
+        var textOffset2=off2;
+        var off3=(850/20);
+        var textOffset3=off3;
+    for(var i=0; i<20; i++){
+
+        document.body.appendChild(textOff1(20, textOffset1));
+
+        textOffset1+=off1;
+    }
+        for(var i=0; i<3; i++){
+
+        document.body.appendChild(textOff2(1, textOffset2));
+
+        textOffset2+=off2;
+    }
+        for(var i=0; i<20; i++){
+
+        document.body.appendChild(textOff3(20, textOffset3));
+
+        textOffset3+=off3;
+    }
   
 //===================================CODE HERE =================================================
 
