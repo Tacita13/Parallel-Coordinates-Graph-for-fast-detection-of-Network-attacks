@@ -1,0 +1,254 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Vielleicht kann ich.js</title>    
+        <script src="../../build/three.js"></script>
+
+        <script>
+
+//===================================CUSTOM FUNCTIONS=================================================
+    /*    
+        función para generar las líneas
+   
+        función para desplegar cada parametro individualmente:
+        p1: scr address, 
+        p2: dest address,
+        p3: dest port
+
+        CHANGES:
+        3ro hasta 1400, static,
+         recibo un array [p1, p2, p3] o mejor un json y tambien recibo #p1, #p2, #p3.
+        */
+        //using
+        function Lines(material2){
+            //summon a geometry object
+             var geometryP2 = new THREE.Geometry();
+
+             //call offset function to get vectors
+             //no funciona bien
+             var vectors=offset(3,2,1,2);
+             var vector1=vectors[2];
+             var vector2=vectors[1];
+             var vector3=vectors[2];
+             //summon the vector lines with fixed x coordinates and moving y coordinates
+             //p1: scr address
+             for(var i=0; i<3; i++){
+                geometryP2.vertices.push(new THREE.Vector3(-4, vector1[i], 0));
+             }
+             //p2: dest address
+             for(var j=0; j<1; j++){
+                geometryP2.vertices.push(new THREE.Vector3(0, vector2[j], 0));
+             }
+             //p3: dest port
+             for(var k=0; k<3; k++){
+                geometryP2.vertices.push(new THREE.Vector3(4, vector3[k], 0));
+             }
+            //summon the line
+            var lineP2 = new THREE.Line(geometryP2, material2);
+            //return the mapped flow, and the updated variables
+            return lineP2;   
+        }
+
+        //a cada parametro individual se le asigna un yDest unico, el resto de las coordenadas son fijas
+        //cada scrIP debe contener: size, nombre destIP y port
+             //cada destIP debe contener: size, nombre y port
+                     //cada port debe contener: size y nombre
+                     //.keys() para sacar el size ,
+                     //NOTAS:==> IPV4, IPV6(más avanzado), Home Network; p2: word /24 p1 : network de nosotros, p3: 1- 65,000
+                     //Llegaría así ==> {(1,2),(2,5), (1,3), (3,5), ...}
+        //not using
+        function readData(data){
+            var info = json.parse(data)
+            info.ScrIP.DestIP.Port;
+            //---------------
+            var flow = {};
+        flow[234]     = {ScrIP: 234, ScrIPLink: {DestIP: 30, DestIPLink: {Port: 80}}};
+        flow[567]     = {ScrIP: 567, ScrIPLink: {DestIP: 40, DestIPLink: {Port: 90}}};
+        flow[42]      = {ScrIP: 42, ScrIPLink: {DestIP: 50, DestIPLink: {Port: 100}}};
+
+
+            var flowSize = {};
+        flowSize[size] ={size:'size', ScrIPSize: 4, DestIPSize: 35, portSize: 10};
+
+        // Usage: 
+        var id = 234;
+        var FL = flow[id];
+        console.log(FL.ScrIPLink.DestIPLink.Port); //
+
+        }
+
+        //gives 3 arrays with the possible vector position in the 3 parameters
+        // using
+        function offset(yDest,size1, size2, size3){
+         //calculate the ofsset to spread ¨evenly¨ through the graph
+
+         offSet1=((12/2)/2);
+         var yDest1Array=[];
+         var yDest1=yDest;
+         for(var i=0; i<2; i++){
+             //decrease the y coordinate given the offset
+             yDest1-=offSet1; 
+
+           yDest1Array[i]=yDest1;
+        }
+
+         offSet2=((12/1)/2);
+         var yDest2Array=[];
+         var yDest2=yDest;
+         for(var i=0; i<1; i++){
+             //decrease the y coordinate given the offset
+             yDest2-=offSet2; 
+
+           yDest2Array[i]=yDest2;
+        }
+
+        offSet3=((12/2)/2);
+         var yDest3Array=[];
+         var yDest3=yDest;
+         for(var i=0; i<2; i++){
+             //decrease the y coordinate given the offset
+             yDest3-=offSet3; 
+
+           yDest3Array[i]=yDest3;
+            }
+        return [yDest1Array, yDest2Array, yDest3Array];
+        }
+
+        //keys should return an array of all the keys of that json
+        //object and the I can use it to get the lenght, which in turn gives me the size
+        //not using
+        function size(){
+            var size = flow.keys();
+            return size.lenght();
+        }
+
+        //Playing with  ==> do a for loop using size
+
+    function textOff1(size, textOffset){
+
+            text1 = document.createElement('div');
+            text1.style.position = 'absolute';
+            text1.style.width = 100;
+            text1.style.height = 100;
+            text1.style.backgroundColor = "white";
+            text1.innerHTML = "hi there!";
+            text1.style.top = (870-textOffset) + 'px'; 
+            text1.style.left = 0 + 'px';
+            
+            return text1;  
+    }
+        function textOff2(size, textOffset){
+
+            text2 = document.createElement('div');
+            text2.style.position = 'absolute';
+            text2.style.width = 100;
+            text2.style.height = 100;
+            text2.style.backgroundColor = "white";
+            text2.innerHTML = "hi there!";
+            text2.style.top = (870-textOffset) + 'px'; 
+            text2.style.left = 830 + 'px';
+            
+            return text2;  
+    }
+
+            function textOff3(size, textOffset){
+
+            text3 = document.createElement('div');
+            text3.style.position = 'absolute';
+            text3.style.width = 100;
+            text3.style.height = 100;
+            text3.style.backgroundColor = "white";
+            text3.innerHTML = "hi there!";
+            text3.style.top = (870-textOffset) + 'px'; 
+            text3.style.left = 1660 + 'px';
+            
+            return text3;  
+    }
+    
+//===================================END OF CUSTOM FUNCTIONS=================================================
+
+        window.onload = function() {
+
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setSize( 1700, 900 );
+            document.body.appendChild( renderer.domElement );
+
+            var scene = new THREE.Scene();
+
+            var camera = new THREE.PerspectiveCamera(
+                35,             // Field of view
+                800 / 600,      // Aspect ratio
+                0.1,            // Near plane
+                10000           // Far plane
+            );
+            camera.position.set( 0, 0, 10 );
+                      // camera.position.set( 20, 21, 0 );
+
+            camera.lookAt( scene.position );
+
+//===================================CANVAS=================================================
+    //Manage the material of the lines
+    var material = new THREE.LineDashedMaterial({
+        color: 0x0000ff, linewidth: 3
+    });
+    var material2 = new THREE.LineDashedMaterial({
+        color: 0x255425, linewidth: 1, dashSize: 5
+    });
+       //PermanentLine1 and border
+       //verificar si el borde de abajo es necesario, no presente en el del paper
+       var geometry = new THREE.Geometry();
+            geometry.vertices.push(new THREE.Vector3(-4, 3, 0));
+            geometry.vertices.push(new THREE.Vector3(-4, -3, 0)); 
+            geometry.vertices.push(new THREE.Vector3(4, -3, 0));
+            geometry.vertices.push(new THREE.Vector3(4, 3, 0));
+       var line = new THREE.Line(geometry, material);
+
+          //PermanentLine2
+       var geometry2 = new THREE.Geometry();
+            geometry2.vertices.push(new THREE.Vector3(0,3,0))
+            geometry2.vertices.push(new THREE.Vector3(0,-3,0))
+       var line2 = new THREE.Line(geometry2, material);
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MODIFYIER<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+        //holds the result of the function call
+         var result;
+        //function call
+           result =Lines(material2);
+        //adds the line to the scene
+           scene.add(result);
+        
+
+       //Adds the permanent lines
+        scene.add(line);
+        scene.add(line2);
+
+        //text preformance
+        var text1;
+        var text2;
+        var text3;
+        var off=(850/20);
+        var textOffset=off;
+    for(var i=0; i<20; i++){
+
+        document.body.appendChild(textOff1(20, textOffset));
+        document.body.appendChild(textOff2(20, textOffset));
+        document.body.appendChild(textOff3(20, textOffset));
+        textOffset+=off;
+    }
+
+
+//=================================== ^ CODE HERE ^ =================================================
+
+            var light = new THREE.PointLight( 0xFFFF00 );
+            light.position.set( 10, 0, 10 );
+            scene.add( light );
+
+            renderer.setClearColor( 0xdddddd, 1);
+            renderer.render( scene, camera );
+    };
+        
+        </script>
+    </head>
+    <body></body>
+    </html>
