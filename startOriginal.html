@@ -142,16 +142,13 @@ function readData(flows){
     var scrIPArr= new Array();
     var destIPArr= new Array();
     var destPortArr= new Array();
-    var scrIPIntArr= new Array();
-    var destIPIntArr= new Array();
+
     var fixedFlow= new Array();
 
 for (i in flows){
       scrIPArr[i]=flows[i].sip;
       destIPArr[i]=flows[i].dip;
       destPortArr[i]=flows[i].dport;
-      scrIPIntArr[i]=flows[i].sipint;
-      destIPIntArr[i]=flows[i].dipint;
       fixedFlow[i]=flowing(scrIPArr[i], destIPArr[i], destPortArr[i]);
 }
 
@@ -165,59 +162,25 @@ destIPArr= destIPArr.filter( function( item, index, inputArray ) {
 destPortArr= destPortArr.filter( function( item, index, inputArray ) {
         return inputArray.indexOf(item) == index;
     });
-scrIPIntArr= scrIPIntArr.filter( function( item, index, inputArray ) {
-        return inputArray.indexOf(item) == index;
-    });
-destIPIntArr= destIPIntArr.filter( function( item, index, inputArray ) {
-        return inputArray.indexOf(item) == index;
-    });
-
 
         return [fixedFlow, scrIPArr, destIPArr, destPortArr];
-
     }
 
 
-        function textOff1(textOffset, text){
+    function textRange(x, y, f, text){
 
-            text1 = document.createElement('div');
-            text1.style.position = 'absolute';
-            text1.style.width = 100;
-            text1.style.height = 100;
-            text1.style.backgroundColor = "white";
-            text1.innerHTML = text;
-            text1.style.top = (940-textOffset) + 'px'; 
-            text1.style.left = 0 + 'px';
+        text1 = document.createElement('div');
+        text1.style.position = 'absolute';
+        text1.style.width = 150;
+        text1.style.height = 150;
+        text1.style.fontSize = f +'px';
+        text1.innerHTML = text;
+        text1.style.top = y + 'px'; 
+        text1.style.left = x + 'px';
             
-            return text1;  
-    }
-        function textOff2(textOffset, text){
-
-            text2 = document.createElement('div');
-            text2.style.position = 'absolute';
-            text2.style.width = 100;
-            text2.style.height = 100;
-            text2.style.backgroundColor = "white";
-            text2.innerHTML = text;
-            text2.style.top = (930-textOffset) + 'px'; 
-            text2.style.left = 830 + 'px';
-            
-            return text2;  
+         return text1;  
     }
 
-            function textOff3(textOffset, text){
-
-            text3 = document.createElement('div');
-            text3.style.position = 'absolute';
-            text3.style.width = 100;
-            text3.style.height = 100;
-            text3.style.backgroundColor = "white";
-            text3.innerHTML = text;
-            text3.style.top = (900-textOffset) + 'px'; 
-            text3.style.left = 1660 + 'px';
-            
-            return text3;  
-    }
 //converts any given IP to a non-dotted integer
     function ipToInt(ip) {
     var parts = ip.split(".");
@@ -240,17 +203,27 @@ function intToIP(int) {
     return part4 + "." + part3 + "." + part2 + "." + part1;
 }
 
+function getMaxOfArray(list) {
+    res=new Array();
+    for(var i=0; i<list.length;i++){
+        res[i]=ipToInt(list[i]);
+    }
+  return Math.max.apply(null, res);
+}
+
 function sortIP(list){
     res=new Array();
     for(var i=0; i<list.length;i++){
         res[i]=ipToInt(list[i]);
     }
+
     res.sort(function(a, b){return b-a});
     for(var j=0; j<list.length;j++){
         res[i]=intToIP(res[i]);
     }
     return res;
 }
+
 
 //==========================END OF CUSTOM FUNCTIONS=================================
 
@@ -296,12 +269,12 @@ function sortIP(list){
             geometry2.vertices.push(new THREE.Vector3(0,-3.10,0))
        var line2 = new THREE.Line(geometry2, material);
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MODIFYIER<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MODIFYIER<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 //Generates ScrIP as a hash table, after recieving array list input it generates the y coordinates in a list.
 
 //SAMPLE LIST
-//TO ADD: Universe:2ˆ23, sipint, dipint, dportint
+//TO ADD: Universe:2ˆ23
 
 var data =[{"sip": "136.145.231.61", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.350000", "packets": 6, "finnoack": false, "bytes": 546, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:00:35.154000", "nhip": "0.0.0.0", "dport": 39915, "output": 0, "sport": 80, "dip": "130.225.192.100", "uniform_packets": false}, {"sip": "136.145.231.61", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.250000", "packets": 6, "finnoack": false, "bytes": 546, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:00:35.504000", "nhip": "0.0.0.0", "dport": 39937, "output": 0, "sport": 80, "dip": "130.225.192.100", "uniform_packets": false}, {"sip": "136.145.231.61", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.150000", "packets": 6, "finnoack": false, "bytes": 497, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:05:11.852000", "nhip": "0.0.0.0", "dport": 56521, "output": 0, "sport": 80, "dip": "69.164.59.195", "uniform_packets": false}, {"sip": "136.145.231.61", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.200000", "packets": 6, "finnoack": false, "bytes": 497, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:05:12.052000", "nhip": "0.0.0.0", "dport": 56549, "output": 0, "sport": 80, "dip": "69.164.59.195", "uniform_packets": false}, {"sip": "136.145.231.43", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.150000", "packets": 1, "finnoack": false, "bytes": 46, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:00:55.518000", "nhip": "0.0.0.0", "dport": 41469, "output": 0, "sport": 80, "dip": "80.82.65.192", "uniform_packets": false}, {"sip": "136.145.231.37", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:03.450000", "packets": 3, "finnoack": false, "bytes": 669, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:06:00.852000", "nhip": "0.0.0.0", "dport": 33829, "output": 0, "sport": 80, "dip": "92.97.199.192", "uniform_packets": false}, {"sip": "136.145.231.37", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:06", "packets": 4, "finnoack": false, "bytes": 729, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:06:06.934000", "nhip": "0.0.0.0", "dport": 39464, "output": 0, "sport": 80, "dip": "92.97.199.192", "uniform_packets": false}, {"sip": "136.145.231.37", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.100000", "packets": 1, "finnoack": false, "bytes": 557, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:06:07.984000", "nhip": "0.0.0.0", "dport": 33829, "output": 0, "sport": 80, "dip": "92.97.199.192", "uniform_packets": false}, {"sip": "136.145.231.25", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00", "packets": 1, "finnoack": false, "bytes": 46, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:01:14.356000", "nhip": "0.0.0.0", "dport": 51452, "output": 0, "sport": 80, "dip": "162.210.107.5", "uniform_packets": false}, {"sip": "136.145.231.25", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00", "packets": 1, "finnoack": false, "bytes": 46, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:01:14.356000", "nhip": "0.0.0.0", "dport": 61250, "output": 0, "sport": 80, "dip": "162.210.107.5", "uniform_packets": false}, {"sip": "136.145.231.25", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00", "packets": 1, "finnoack": false, "bytes": 46, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:01:14.356000", "nhip": "0.0.0.0", "dport": 54038, "output": 0, "sport": 80, "dip": "162.210.107.5", "uniform_packets": false}, {"sip": "136.145.231.25", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00", "packets": 1, "finnoack": false, "bytes": 46, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:01:14.356000", "nhip": "0.0.0.0", "dport": 57562, "output": 0, "sport": 80, "dip": "162.210.107.5", "uniform_packets": false}, {"sip": "136.145.231.37", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.150000", "packets": 1, "finnoack": false, "bytes": 557, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:06:19.984000", "nhip": "0.0.0.0", "dport": 39464, "output": 0, "sport": 80, "dip": "92.97.199.192", "uniform_packets": false}, {"sip": "136.145.231.61", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.300000", "packets": 7, "finnoack": false, "bytes": 598, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:10:16.896000", "nhip": "0.0.0.0", "dport": 40407, "output": 0, "sport": 80, "dip": "129.63.205.113", "uniform_packets": false}, {"sip": "136.145.231.61", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.100000", "packets": 6, "finnoack": false, "bytes": 546, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:10:17.346000", "nhip": "0.0.0.0", "dport": 40427, "output": 0, "sport": 80, "dip": "129.63.205.113", "uniform_packets": false}, {"sip": "136.145.231.10", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.150000", "packets": 1, "finnoack": false, "bytes": 46, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:05:23.458000", "nhip": "0.0.0.0", "dport": 45624, "output": 0, "sport": 80, "dip": "80.82.65.192", "uniform_packets": false}, {"sip": "136.145.231.35", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.250000", "packets": 1, "finnoack": false, "bytes": 46, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:06:31.208000", "nhip": "0.0.0.0", "dport": 39937, "output": 0, "sport": 80, "dip": "80.82.65.192", "uniform_packets": false}, {"sip": "136.145.231.31", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.050000", "packets": 1, "finnoack": false, "bytes": 46, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:07:03.824000", "nhip": "0.0.0.0", "dport": 50111, "output": 0, "sport": 80, "dip": "80.82.65.192", "uniform_packets": false}, {"sip": "136.145.231.52", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.250000", "packets": 1, "finnoack": false, "bytes": 46, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:18:06.032000", "nhip": "0.0.0.0", "dport": 45966, "output": 0, "sport": 80, "dip": "80.82.65.192", "uniform_packets": false},  {"sip": "136.145.231.44", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.200000", "packets": 1, "finnoack": false, "bytes": 46, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:13:28.216000", "nhip": "0.0.0.0", "dport": 60704, "output": 0, "sport": 80, "dip": "80.82.65.192", "uniform_packets": false}, {"sip": "136.145.231.37", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.650000", "packets": 4, "finnoack": false, "bytes": 345, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:19:55.764000", "nhip": "0.0.0.0", "dport": 51642, "output": 0, "sport": 80, "dip": "139.162.13.205", "uniform_packets": false}, {"sip": "136.145.231.15", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.050000", "packets": 1, "finnoack": false, "bytes": 46, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:16:36.824000", "nhip": "0.0.0.0", "dport": 58611, "output": 0, "sport": 80, "dip": "80.82.65.192", "uniform_packets": false}, {"sip": "136.145.231.61", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.200000", "packets": 6, "finnoack": false, "bytes": 546, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:25:33.490000", "nhip": "0.0.0.0", "dport": 56254, "output": 0, "sport": 80, "dip": "192.83.252.60", "uniform_packets": false}, {"sip": "136.145.231.61", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.050000", "packets": 6, "finnoack": false, "bytes": 546, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:25:33.640000", "nhip": "0.0.0.0", "dport": 56272, "output": 0, "sport": 80, "dip": "192.83.252.60", "uniform_packets": false}, {"sip": "136.145.231.25", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:01.150000", "packets": 4, "finnoack": false, "bytes": 599, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:37:03.818000", "nhip": "0.0.0.0", "dport": 54913, "output": 0, "sport": 80, "dip": "24.182.49.5", "uniform_packets": false}, {"sip": "136.145.231.12", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.500000", "packets": 5, "finnoack": false, "bytes": 783, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:38:59.646000", "nhip": "0.0.0.0", "dport": 59174, "output": 0, "sport": 80, "dip": "177.53.116.2", "uniform_packets": false}, {"sip": "136.145.231.12", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:01.950000", "packets": 21, "finnoack": false, "bytes": 25071, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:39:00.246000", "nhip": "0.0.0.0", "dport": 59177, "output": 0, "sport": 80, "dip": "177.53.116.2", "uniform_packets": false}, {"sip": "136.145.231.37", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:20.850000", "packets": 4, "finnoack": false, "bytes": 214, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:39:14.388000", "nhip": "0.0.0.0", "dport": 25964, "output": 0, "sport": 80, "dip": "88.105.37.59", "uniform_packets": false}, {"sip": "136.145.231.37", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:20.850000", "packets": 4, "finnoack": false, "bytes": 214, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:40:56.540000", "nhip": "0.0.0.0", "dport": 50809, "output": 0, "sport": 80, "dip": "120.188.3.91", "uniform_packets": false}, {"sip": "136.145.231.25", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.250000", "packets": 1, "finnoack": false, "bytes": 46, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:38:41.644000", "nhip": "0.0.0.0", "dport": 55712, "output": 0, "sport": 80, "dip": "80.82.65.192", "uniform_packets": false}, {"sip": "136.145.231.61", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.050000", "packets": 6, "finnoack": false, "bytes": 546, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:43:49.362000", "nhip": "0.0.0.0", "dport": 49852, "output": 0, "sport": 80, "dip": "199.109.17.48", "uniform_packets": false}, {"sip": "136.145.231.61", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.150000", "packets": 6, "finnoack": false, "bytes": 546, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:43:49.512000", "nhip": "0.0.0.0", "dport": 49864, "output": 0, "sport": 80, "dip": "199.109.17.48", "uniform_packets": false},  {"sip": "136.145.231.37", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.150000", "packets": 1, "finnoack": false, "bytes": 46, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:45:41.366000", "nhip": "0.0.0.0", "dport": 50503, "output": 0, "sport": 80, "dip": "80.82.65.192", "uniform_packets": false}, {"sip": "136.145.231.47", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.100000", "packets": 1, "finnoack": false, "bytes": 46, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:46:46.500000", "nhip": "0.0.0.0", "dport": 54451, "output": 0, "sport": 80, "dip": "80.82.65.192", "uniform_packets": false}, {"sip": "136.145.231.61", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.300000", "packets": 6, "finnoack": false, "bytes": 546, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:54:44.690000", "nhip": "0.0.0.0", "dport": 46844, "output": 0, "sport": 80, "dip": "147.155.106.25", "uniform_packets": false}, {"sip": "136.145.231.61", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.150000", "packets": 6, "finnoack": false, "bytes": 546, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:54:45.090000", "nhip": "0.0.0.0", "dport": 46902, "output": 0, "sport": 80, "dip": "147.155.106.25", "uniform_packets": false}, {"sip": "136.145.231.61", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.100000", "packets": 6, "finnoack": false, "bytes": 546, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:55:09.728000", "nhip": "0.0.0.0", "dport": 46174, "output": 0, "sport": 80, "dip": "147.155.106.30", "uniform_packets": false}, {"sip": "136.145.231.61", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.100000", "packets": 6, "finnoack": false, "bytes": 546, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:55:09.978000", "nhip": "0.0.0.0", "dport": 46220, "output": 0, "sport": 80, "dip": "147.155.106.30", "uniform_packets": false}, {"sip": "136.145.231.61", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.300000", "packets": 6, "finnoack": false, "bytes": 546, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:55:50.502000", "nhip": "0.0.0.0", "dport": 36250, "output": 0, "sport": 80, "dip": "147.155.106.44", "uniform_packets": false}, {"sip": "136.145.231.61", "protocol": 6, "input": 0, "timeout_started": false, "application": 0, "timeout_killed": false, "duration": "0:00:00.100000", "packets": 6, "finnoack": false, "bytes": 546, "tcpflags": "", "sensor_id": 0, "classtype_id": 3, "stime": "2016-10-25 00:55:44.802000", "nhip": "0.0.0.0", "dport": 34950, "output": 0, "sport": 80, "dip": "147.155.106.41", "uniform_packets": false}];
  
@@ -324,6 +297,7 @@ for(var i=0; i<scrIPList.length; i++){
     scrIP.setItem(scrIPList[i], scrIPY[i]);
 
 }
+
 
 var destIPList=flowResult[2];
 sortIP(destIPList);
@@ -359,27 +333,15 @@ for(var i=0; i<destPortList.length; i++){
 }
 
 
-for (var key in scrIP) {
-    var obj = scrIP[key];
-           for (var prop in obj) {
-                console.log("aqui:==>> "+prop + " = " + obj[prop]);
-            
-           }
-        }
-        for (var key in destIP) {
-    var obj = destIP[key];
-           for (var prop in obj) {
-                console.log("aqui:==>> "+prop + " = " + obj[prop]);
-            
-           }
-        }
-        for (var key in destPort) {
-    var obj = destPort[key];
-           for (var prop in obj) {
-                console.log("aqui:==>> "+prop + " = " + obj[prop]);
-            
-           }
-        }
+console.log("Max ===>> "+scrIPList[0]);
+console.log("Max ===>> "+scrIPList[scrIPList.length-1]);
+
+console.log("Max ===>> "+destIPList[0]);
+console.log("Max ===>> "+destIPList[destIPList.length-1]);
+
+console.log("Max ===>> "+destPortList[0]);
+console.log("Max ===>> "+destPortList[destPortList.length-1]);
+
 
         //holds the result of the function call
          var result;
@@ -409,18 +371,24 @@ for (var key in scrIP) {
         var off3=(850/destPort.length);
         var textOffset3=off3;
 
-    for(var i=scrIP.length; i>0; i--){
-        document.body.appendChild(textOff1(textOffset1, scrIPList[i-1]));
-        textOffset1+=off1;
-    }
-        for(var i=destIP.length; i>0; i--){
-        document.body.appendChild(textOff2(textOffset2, destIPList[i-1]));
-        textOffset2+=off2;
-    }
-        for(var i=destPort.length ; i>0; i--){
-        document.body.appendChild(textOff3(textOffset3, destPortList[i-1]));
-        textOffset3+=off3;
-    }
+    document.body.appendChild(textRange(45, 35, 30, scrIPList[0]));//ScrIP max
+    document.body.appendChild(textRange(45, 875, 30, scrIPList[scrIPList.length-1]));//ScrIP min
+
+    document.body.appendChild(textRange(760, 35, 30, destIPList[0]));//destIP max
+    document.body.appendChild(textRange(760, 875, 30, destIPList[destIPList.length-1]));//destIP min
+
+    document.body.appendChild(textRange(1590, 35, 30, destPortList[0]));//destPort max
+    document.body.appendChild(textRange(1590, 875, 30, destPortList[destPortList.length-1]));//destPort min
+
+    document.body.appendChild(textRange(45, 5, 30, "ScrIP"));//ScrIP max
+    document.body.appendChild(textRange(830, 5, 30, "destIP"));//ScrIP min
+    document.body.appendChild(textRange(1570, 5, 30, "destPort"));//ScrIP max
+
+    document.body.appendChild(textRange(5, 35, 20, "Max"));//ScrIP min
+    document.body.appendChild(textRange(5, 880, 20, "Min"));//ScrIP max
+    document.body.appendChild(textRange(1670, 35, 20, "Max"));//ScrIP min
+    document.body.appendChild(textRange(1670, 880, 20, "Min"));//ScrIP max
+
   
 //===================================CODE HERE =======================================
 
