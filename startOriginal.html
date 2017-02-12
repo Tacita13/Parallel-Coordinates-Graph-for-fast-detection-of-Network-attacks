@@ -12,7 +12,7 @@
 
 //===================================CUSTOM FUNCTIONS========== =======================
     
-
+var diffColors;
 function HashTable(obj)
 {
     this.length = 0;
@@ -122,8 +122,13 @@ function HashTable(obj)
                                      //p3: dest port
                                       new THREE.Vector3(4, destPort.getItem(flow[2]), 0));
             
+        for ( var i = 0; i < geometryP2.vertices.length; i+=2 ) {
+            geometryP2.colors[i]= new THREE.Color(Math.random(), Math.random(), Math.random());
+            geometryP2.colors[i+1] = geometryP2.colors[i];
+        }
+
             //summon the line
-            var lineP2 = new THREE.Line(geometryP2, material2);
+            var lineP2 = new THREE.Line(geometryP2, material2, THREE.LineSegments);
             //return the mapped flow, and the updated variables
             return lineP2;   
         }
@@ -180,6 +185,8 @@ destPortArr= destPortArr.filter( function( item, index, inputArray ) {
         text1.innerHTML = text;
         text1.style.top = y + 'px'; 
         text1.style.left = x + 'px';
+        text1.style.color = "#000000";
+        text1.style.backgroundColor ="rgba(255, 175, 10)";
             
          return text1;  
     }
@@ -251,25 +258,26 @@ function sortIP(list){
 
 //===================================CANVAS=================================================
     //Manage the material of the lines
-    var material = new THREE.LineDashedMaterial({
-        color: 0x0000ff, linewidth: 3
+    var material = new THREE.LineBasicMaterial({
+        color: 0xffbb33 , linewidth: 10
     });
-    var material2 = new THREE.LineDashedMaterial({
-        color: 0xff0000, linewidth: 1, dashSize: 5
+
+    var material2 = new THREE.LineBasicMaterial({
+        linewidth: 2, color: 0xffbb33, vertexColors: THREE.VertexColors
     });
+
        //PermanentLine1 and border
-       //verificar si el borde de abajo es necesario, no presente en el del paper
        var geometry = new THREE.Geometry();
-            geometry.vertices.push(new THREE.Vector3(-4, 3, 0));
-            geometry.vertices.push(new THREE.Vector3(-4, -3.10, 0)); 
-            geometry.vertices.push(new THREE.Vector3(4, -3.10, 0));
-            geometry.vertices.push(new THREE.Vector3(4, 3, 0));
+            geometry.vertices.push(new THREE.Vector3(-4, 2.80, 0));
+            geometry.vertices.push(new THREE.Vector3(-4, -2.50, 0)); 
+            geometry.vertices.push(new THREE.Vector3(4, -2.50, 0));
+            geometry.vertices.push(new THREE.Vector3(4, 2.80, 0));
        var line = new THREE.Line(geometry, material);
 
           //PermanentLine2
        var geometry2 = new THREE.Geometry();
-            geometry2.vertices.push(new THREE.Vector3(0,3,0))
-            geometry2.vertices.push(new THREE.Vector3(0,-3.10,0))
+            geometry2.vertices.push(new THREE.Vector3(0,2.70,0))
+            geometry2.vertices.push(new THREE.Vector3(0,-2.50,0))
        var line2 = new THREE.Line(geometry2, material);
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MODIFYIER<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -278,8 +286,8 @@ function sortIP(list){
 
 //SAMPLE LIST
 //TO ADD: Universe:2ˆ23
-var data1="flows.json";
-console.log(data1);
+//var data1="flows.json";
+
 //var data1 = JSON.parse(f);
 //var data1=myJSON.flow;
 
@@ -291,17 +299,15 @@ var scrIPList=flowResult[1];
 sortIP(scrIPList);
 var scrIP = new HashTable();
 var scrIPY=[scrIPList.length];
-var offset1=((12/scrIPList.length)/2);
-var res=3;
+var offset1=((10.5/scrIPList.length)/2);
+var res=2.8;
 for(var i=0; i<scrIPList.length;i++){
     res-=offset1;
     scrIPY[i]=res;
-    
 }
 
 for(var i=0; i<scrIPList.length; i++){
     scrIP.setItem(scrIPList[i], scrIPY[i]);
-
 }
 
 
@@ -309,8 +315,8 @@ var destIPList=flowResult[2];
 sortIP(destIPList);
 var destIP = new HashTable();
 var destIPY=[destIPList.length];
-var offset2=((12/destIPList.length)/2);
-var res=3;
+var offset2=((10.5/destIPList.length)/2);
+var res=2.8;
 for(var i=0; i<destIPList.length;i++){
     res-=offset2;
     destIPY[i]=res;
@@ -325,8 +331,8 @@ var destPortList=flowResult[3];
 destPortList.sort(function(a, b){return b-a});
 var destPort = new HashTable();
 var destPortY=[destPortList.length];
-var offset3=((12/destPortList.length)/2);
-var res=3;
+var offset3=((10.5/destPortList.length)/2);
+var res=2.8;
 for(var i=0; i<destPortList.length;i++){
     res-=offset3;
     destPortY[i]=res;
@@ -336,8 +342,6 @@ for(var i=0; i<destPortList.length; i++){
     destPort.setItem(destPortList[i], destPortY[i]);
 }
 
-
-
         //holds the result of the function call
          var result;
          var input=flowResult[0];
@@ -345,8 +349,7 @@ for(var i=0; i<destPortList.length; i++){
         //NEED: total number of flows
          for(var i=0; i<data.length; i++){
         //function call
-
-           result =Lines(material2, input[i], scrIP, destIP, destPort);
+            result =Lines(material2, input[i], scrIP, destIP, destPort);
         //adds the line to the scene
            scene.add(result);
         }
@@ -355,32 +358,22 @@ for(var i=0; i<destPortList.length; i++){
         scene.add(line);
         scene.add(line2);
 
-        //text performance, se ve algo arcaico, optimizar
-        var text1;
-        var text2;
-        var text3;
-        var off1=(850/scrIP.length);
-        var textOffset1=off1;
-        var off2=(850/destIP.length);
-        var textOffset2=off2;
-        var off3=(850/destPort.length);
-        var textOffset3=off3;
+        //text performance
+    document.body.appendChild(textRange(45, 30, 25, scrIPList[0]));//ScrIP max
+    document.body.appendChild(textRange(45, 875, 25, scrIPList[scrIPList.length-1]));//ScrIP min
 
-    document.body.appendChild(textRange(45, 35, 30, scrIPList[0]));//ScrIP max
-    document.body.appendChild(textRange(45, 875, 30, scrIPList[scrIPList.length-1]));//ScrIP min
+    document.body.appendChild(textRange(770, 30, 25, destIPList[0]));//destIP max
+    document.body.appendChild(textRange(770, 875, 25, destIPList[destIPList.length-1]));//destIP min
 
-    document.body.appendChild(textRange(760, 35, 30, destIPList[0]));//destIP max
-    document.body.appendChild(textRange(760, 875, 30, destIPList[destIPList.length-1]));//destIP min
+    document.body.appendChild(textRange(1600, 30, 25, destPortList[0]));//destPort max
+    document.body.appendChild(textRange(1600, 875, 25, destPortList[destPortList.length-1]));//destPort min
 
-    document.body.appendChild(textRange(1590, 35, 30, destPortList[0]));//destPort max
-    document.body.appendChild(textRange(1590, 875, 30, destPortList[destPortList.length-1]));//destPort min
+    document.body.appendChild(textRange(45, 830, 28, "scrIP"));//ScrIP max
+    document.body.appendChild(textRange(830, 830, 28, "destIP"));//ScrIP min
+    document.body.appendChild(textRange(1570, 830, 28, "destPort"));//ScrIP max
 
-    document.body.appendChild(textRange(45, 5, 30, "scrIP"));//ScrIP max
-    document.body.appendChild(textRange(830, 5, 30, "destIP"));//ScrIP min
-    document.body.appendChild(textRange(1570, 5, 30, "destPort"));//ScrIP max
-
-    document.body.appendChild(textRange(5, 35, 20, "Max"));//ScrIP min
-    document.body.appendChild(textRange(5, 880, 20, "Min"));//ScrIP max
+    document.body.appendChild(textRange(7, 35, 20, "Max"));//ScrIP min
+    document.body.appendChild(textRange(7, 880, 20, "Min"));//ScrIP max
     document.body.appendChild(textRange(1670, 35, 20, "Max"));//ScrIP min
     document.body.appendChild(textRange(1670, 880, 20, "Min"));//ScrIP max
 
@@ -400,13 +393,13 @@ var raycater,parentTransform;
 
     var objects =raycaster.intersectObjects(scene.children);
     for(var i=0; i<objects.length;i++)
-    console.log(objects[i]);
+ 
 
             var light = new THREE.PointLight( 0xFFFF00 );
             light.position.set( 10, 0, 10 );
-            scene.add( light );
+            scene.add(light);
 
-            renderer.setClearColor( 0xdddddd, 1);
+            renderer.setClearColor( 0xffffff, 1);
             renderer.render( scene, camera );
         //    scene.add( parentTransform );
 
