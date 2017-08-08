@@ -5,9 +5,9 @@
     </head>
 
     <body>
-      <script src="../../../three.js-master/build/three.js"></script>
-      <script src="../../../three.js-master/examples/js/renderers/Projector.js"></script>
-      <script src="../../../three.js-master/examples/js/renderers/CanvasRenderer.js"></script>
+      <script src="../../../../three.js-master/build/three.js"></script>
+      <script src="../../../../three.js-master/examples/js/renderers/Projector.js"></script>
+      <script src="../../../../three.js-master/examples/js/renderers/CanvasRenderer.js"></script>
       <script type="text/javascript">
 
 
@@ -18,84 +18,77 @@
 -ajutar la visualización a que se muestre a un 100% en la pantalla, fijada
 */
 
-function HashTable(obj)
-{
+function HashTable(obj){
     this.length = 0;
     this.items = {};
-    for (var p in obj) {
-        if (obj.hasOwnProperty(p)) {
+    for (var p in obj){
+        if (obj.hasOwnProperty(p)){
             this.items[p] = obj[p];
             this.length++;
         }
     }
 
-    this.setItem = function(key, value)
-    {
+    this.setItem = function(key, value){
         var previous = undefined;
-        if (this.hasItem(key)) {
+        if (this.hasItem(key)){
             previous = this.items[key];
         }
-        else {
+        else{
             this.length++;
         }
         this.items[key] = value;
         return previous;
     }
 
-    this.getItem = function(key) {
+    this.getItem = function(key){
         return this.hasItem(key) ? this.items[key] : undefined;
     }
 
-    this.hasItem = function(key)
-    {
+    this.hasItem = function(key){
         return this.items.hasOwnProperty(key);
     }
 
-    this.removeItem = function(key)
-    {
-        if (this.hasItem(key)) {
+    this.removeItem = function(key){
+        if (this.hasItem(key)){
             previous = this.items[key];
             this.length--;
             delete this.items[key];
             return previous;
         }
-        else {
+        else{
             return undefined;
         }
     }
 
-    this.keys = function()
-    {
+    this.keys = function(){
         var keys = [];
-        for (var k in this.items) {
-            if (this.hasItem(k)) {
+        for (var k in this.items){
+            if (this.hasItem(k)){
                 keys.push(k);
             }
         }
         return keys;
     }
 
-    this.values = function()
-    {
+    this.values = function(){
         var values = [];
-        for (var k in this.items) {
-            if (this.hasItem(k)) {
+        for (var k in this.items){
+            if (this.hasItem(k)){
                 values.push(this.items[k]);
             }
         }
         return values;
     }
 
-    this.each = function(fn) {
-        for (var k in this.items) {
-            if (this.hasItem(k)) {
+    this.each = function(fn){
+        for (var k in this.items){
+            if (this.hasItem(k)){
                 fn(k, this.items[k]);
             }
         }
     }
 
-    this.clear = function()
-    {
+    this.clear = function(){
         this.items = {}
         this.length = 0;
     }

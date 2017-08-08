@@ -1,13 +1,13 @@
 <!DOCTYPE html>
     <html>
     <head>
-        <title>1st</title>
+        <title>Parallel Coordinates Graph (srcIP to destIp to destPort to packets)</title>
     </head>
 
     <body>
-        <script src="../../../three.js-master/build/three.js"></script>
-        <script src="../../../three.js-master/examples/js/renderers/Projector.js"></script>
-        <script src="../../../three.js-master/examples/js/renderers/CanvasRenderer.js"></script>
+        <script src="../../../../three.js-master/build/three.js"></script>
+        <script src="../../../../three.js-master/examples/js/renderers/Projector.js"></script>
+        <script src="../../../../three.js-master/examples/js/renderers/CanvasRenderer.js"></script>
         <script type="text/javascript">
 
 
@@ -18,84 +18,80 @@
 -ajutar la visualización a que se muestre a un 100% en la pantalla, fijada
 */
 
-function HashTable(obj)
-{
+/* 
+hash table function that creates the base data structure used for each array
+*/
+function HashTable(obj){
     this.length = 0;
     this.items = {};
-    for (var p in obj) {
-        if (obj.hasOwnProperty(p)) {
+    for (var p in obj){
+        if (obj.hasOwnProperty(p)){
             this.items[p] = obj[p];
             this.length++;
         }
     }
 
-    this.setItem = function(key, value)
-    {
+    this.setItem = function(key, value){
         var previous = undefined;
-        if (this.hasItem(key)) {
+        if (this.hasItem(key)){
             previous = this.items[key];
         }
-        else {
+        else{
             this.length++;
         }
         this.items[key] = value;
         return previous;
     }
 
-    this.getItem = function(key) {
+    this.getItem = function(key){
         return this.hasItem(key) ? this.items[key] : undefined;
     }
 
-    this.hasItem = function(key)
-    {
+    this.hasItem = function(key){
         return this.items.hasOwnProperty(key);
     }
 
-    this.removeItem = function(key)
-    {
-        if (this.hasItem(key)) {
+    this.removeItem = function(key){
+        if (this.hasItem(key)){
             previous = this.items[key];
             this.length--;
             delete this.items[key];
             return previous;
         }
-        else {
+        else{
             return undefined;
         }
     }
 
-    this.keys = function()
-    {
+    this.keys = function(){
         var keys = [];
-        for (var k in this.items) {
-            if (this.hasItem(k)) {
+        for (var k in this.items){
+            if (this.hasItem(k)){
                 keys.push(k);
             }
         }
         return keys;
     }
 
-    this.values = function()
-    {
+    this.values = function(){
         var values = [];
-        for (var k in this.items) {
-            if (this.hasItem(k)) {
+        for (var k in this.items){
+            if (this.hasItem(k)){
                 values.push(this.items[k]);
             }
         }
         return values;
     }
 
-    this.each = function(fn) {
-        for (var k in this.items) {
-            if (this.hasItem(k)) {
+    this.each = function(fn){
+        for (var k in this.items){
+            if (this.hasItem(k)){
                 fn(k, this.items[k]);
             }
         }
     }
 
-    this.clear = function()
-    {
+    this.clear = function(){
         this.items = {}
         this.length = 0;
     }
@@ -107,7 +103,8 @@ function HashTable(obj)
         función para desplegar cada parametro individualmente:
         p1: scr address,
         p2: dest address,
-        p3: dest port
+        p3: dest port,
+        p4: packet length
 
         CHANGES:
         3ro hasta 1400, static,
@@ -442,10 +439,10 @@ for(var i=0; i<packList.length; i++){
     document.body.appendChild(textRange(1100, 870, 20, "destination Port"));//destPort
     document.body.appendChild(textRange(1550, 870, 20, "Packet length"));//packets
 
-    document.body.appendChild(textRange(7, 35, 20, "Max"));//ScrIP min
-    document.body.appendChild(textRange(7, 830, 20, "Min"));//ScrIP max
-    document.body.appendChild(textRange(1670, 35, 20, "Max"));//ScrIP min
-    document.body.appendChild(textRange(1670, 830, 20, "Min"));//ScrIP max
+    document.body.appendChild(textRange(7, 35, 20, "Max"));//right min
+    document.body.appendChild(textRange(7, 830, 20, "Min"));//right max
+    document.body.appendChild(textRange(1670, 35, 20, "Max"));//left min
+    document.body.appendChild(textRange(1670, 830, 20, "Min"));//left max
 
 
 //===================================CODE HERE =======================================
