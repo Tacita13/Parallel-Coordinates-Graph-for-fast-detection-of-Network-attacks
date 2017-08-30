@@ -204,7 +204,7 @@ function intToIP(int) {
 
 function getMaxOfArray(list) {
     res = [];
-    for(let i = 0; i < list.length; i++){
+    for(let i = 0; i < list.length; i++) {
         res[i] = ipToInt(list[i]);
     }
   return Math.max.apply(null, res);
@@ -212,12 +212,12 @@ function getMaxOfArray(list) {
 
 function sortIP(list) {
     res = [];
-    for(let i = 0; i < list.length; i++){
+    for(let i = 0; i < list.length; i++) {
         res[i] = ipToInt(list[i]);
     }
 
     res.sort(function(a, b){return b - a});
-    for(let j = 0; j < list.length; j++){
+    for(let j = 0; j < list.length; j++) {
         res[i] = intToIP(res[i]);
     }
     return res;
@@ -235,7 +235,7 @@ function transformY(y) {
 
 function boldLines(x, y, list, constX) {
 
-    for(let i = 0; i < list.length; i++){
+    for(let i = 0; i < list.length; i++) {
         if((x == constX) && (y == list[i])) {
             console.log("good");
         }
@@ -316,7 +316,7 @@ var scrIP = new HashTable();
 var scrIPY=[scrIPList.length];
 var offset1=((10.5/scrIPList.length)/2);
 var res=2.8;
-for(let i = 0; i < scrIPList.length; i++){
+for(let i = 0; i < scrIPList.length; i++) {
     res -= offset1;
     scrIPY[i] = res;
 }
@@ -353,7 +353,7 @@ for(let i = 0; i < destPortList.length; i++) {
     destPortY[i] = res;
 }
 
-for(let i=0; i < destPortList.length; i++) {
+for(let i = 0; i < destPortList.length; i++) {
     destPort.setItem(destPortList[i], destPortY[i]);
 }
 
@@ -380,7 +380,7 @@ for(let i = 0; i < packList.length; i++) {
  var input = flowResult[0];
 //iterates per flow
 //NEED: total number of flows
- for(let i = 0; i < data.length; i++){
+ for(let i = 0; i < data.length; i++) {
 //function call
     result = Lines(material2, input[i], scrIP, destIP, destPort, pack);
     var lineClone = result.clone();
@@ -436,7 +436,7 @@ var raycater,parentTransform;
     console.log("HERE IS A MOUSE Y: "+mouse.y);
 
     var objects =raycaster.intersectObjects(scene.children);
-    for(var i=0; i<objects.length;i++)*/
+    for(let i = 0; i < objects.length; i++)*/
 
      window.onMouseClick= function(event) {
         event.preventDefault();
@@ -452,7 +452,7 @@ var raycater,parentTransform;
     let y = mouse.y * ((8.8 / 1.693333333333333) - 1.63);
 
                 let intersects = raycaster.intersectObjects(lines);
-                if ( intersects.length > 0 ) {
+                if (intersects.length > 0) {
                     console.log("Esto es intersects = "+intersects.length);
                     console.log("YES");
                 }
