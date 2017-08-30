@@ -29,8 +29,7 @@
 //===================================CUSTOM FUNCTIONS========== =======================
 
 var diffColors;
-function HashTable(obj)
-{
+function HashTable(obj) {
     this.length = 0;
     this.items = {};
     for (var p in obj) {
@@ -204,7 +203,7 @@ function intToIP(int) {
 
 function getMaxOfArray(list) {
     res=new Array();
-    for(var i=0; i<list.length;i++){
+    for(let i=0; i<list.length;i++){
         res[i]=ipToInt(list[i]);
     }
   return Math.max.apply(null, res);
@@ -212,12 +211,12 @@ function getMaxOfArray(list) {
 
 function sortIP(list){
     res=new Array();
-    for(var i=0; i<list.length;i++){
+    for(let i=0; i<list.length;i++){
         res[i]=ipToInt(list[i]);
     }
 
     res.sort(function(a, b){return b-a});
-    for(var j=0; j<list.length;j++){
+    for(let j=0; j<list.length;j++){
         res[i]=intToIP(res[i]);
     }
     return res;

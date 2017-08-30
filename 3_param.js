@@ -1,58 +1,41 @@
-<!DOCTYPE html>
-    <html>
-    <head>
-        <title>Parallel Coordinates Graph (srcIP to destIp to destPort to packets)</title>
-    </head>
-
-    <body>
-        <script src="../../../../three.js-master/build/three.js"></script>
-        <script src="../../../../three.js-master/examples/js/renderers/Projector.js"></script>
-        <script src="../../../../three.js-master/examples/js/renderers/CanvasRenderer.js"></script>
-        <script type="text/javascript">
-
-
-
 //===================================CUSTOM FUNCTIONS========== =======================
 /* WHAT TO DO:
 -Añadir un button, GUI para que el usuario pueda escoger que variables desea ver
 -ajutar la visualización a que se muestre a un 100% en la pantalla, fijada
 */
 
-/* 
-hash table function that creates the base data structure used for each array
-*/
-function HashTable(obj){
+function HashTable(obj) {
     this.length = 0;
     this.items = {};
     for (var p in obj){
-        if (obj.hasOwnProperty(p)){
+        if (obj.hasOwnProperty(p)) {
             this.items[p] = obj[p];
             this.length++;
         }
     }
 
-    this.setItem = function(key, value){
+    this.setItem = function(key, value) {
         var previous = undefined;
         if (this.hasItem(key)){
             previous = this.items[key];
         }
-        else{
+        else {
             this.length++;
         }
         this.items[key] = value;
         return previous;
     }
 
-    this.getItem = function(key){
+    this.getItem = function(key) {
         return this.hasItem(key) ? this.items[key] : undefined;
     }
 
-    this.hasItem = function(key){
+    this.hasItem = function(key) {
         return this.items.hasOwnProperty(key);
     }
 
-    this.removeItem = function(key){
-        if (this.hasItem(key)){
+    this.removeItem = function(key) {
+        if (this.hasItem(key)) {
             previous = this.items[key];
             this.length--;
             delete this.items[key];
@@ -63,35 +46,35 @@ function HashTable(obj){
         }
     }
 
-    this.keys = function(){
+    this.keys = function() {
         var keys = [];
-        for (var k in this.items){
-            if (this.hasItem(k)){
+        for (var k in this.items) {
+            if (this.hasItem(k)) {
                 keys.push(k);
             }
         }
         return keys;
     }
 
-    this.values = function(){
+    this.values = function() {
         var values = [];
-        for (var k in this.items){
-            if (this.hasItem(k)){
+        for (var k in this.items) {
+            if (this.hasItem(k)) {
                 values.push(this.items[k]);
             }
         }
         return values;
     }
 
-    this.each = function(fn){
-        for (var k in this.items){
-            if (this.hasItem(k)){
+    this.each = function(fn) {
+        for (var k in this.items) {
+            if (this.hasItem(k)) {
                 fn(k, this.items[k]);
             }
         }
     }
 
-    this.clear = function(){
+    this.clear = function() {
         this.items = {}
         this.length = 0;
     }
@@ -103,16 +86,15 @@ function HashTable(obj){
         función para desplegar cada parametro individualmente:
         p1: scr address,
         p2: dest address,
-        p3: dest port,
-        p4: packet length
+        p3: dest port
 
         CHANGES:
         3ro hasta 1400, static,
          recibo un array [p1, p2, p3] o mejor un json y tambien recibo #p1, #p2, #p3.
         */
-var lines =[];
+
 var lineP2;
-        function Lines(material2, flow, scrIP, destIP, destPort, pack){
+        function Lines(material2, flow, scrIP, destIP, destPort) {
             //summon a geometry object
              geometryP2 = new THREE.Geometry();
 
@@ -120,11 +102,9 @@ var lineP2;
                                      //p1: scr address
              geometryP2.vertices.push(new THREE.Vector3(-4, scrIP.getItem(flow[0]), 0),
                                      //p2: dest address
-                                      new THREE.Vector3(-1.5, destIP.getItem(flow[1]), 0),
+                                      new THREE.Vector3(0, destIP.getItem(flow[1]), 0),
                                      //p3: dest port
-                                      new THREE.Vector3(1.5, destPort.getItem(flow[2]), 0),
-                                     //p3: dest port
-                                      new THREE.Vector3(4, pack.getItem(flow[3]), 0));
+                                      new THREE.Vector3(4, destPort.getItem(flow[2]), 0));
 
         for ( var i = 0; i < geometryP2.vertices.length; i+=2 ) {
             geometryP2.colors[i]= new THREE.Color(Math.random(), Math.random(), Math.random());
@@ -133,7 +113,6 @@ var lineP2;
 
             //summon the line
             lineP2 = new THREE.Line(geometryP2, material2, THREE.LineSegments);
-            lines.push(lineP2);
             //return the mapped flow, and the updated variables
             return lineP2;
         }
@@ -146,25 +125,23 @@ var lineP2;
                      //cada port debe contener: size y nombre
                      //.keys() para sacar el size
 
-function flowing(val1, val2, val3, val4){
-    return new Array(val1,val2,val3, val4);
+function flowing(val1, val2, val3) {
+    return new Array(val1,val2,val3);
 
 }
 
-function readData(flows){
+function readData(flows) {
     var scrIPArr= new Array();
     var destIPArr= new Array();
     var destPortArr= new Array();
-    var packArr = new Array();
 
     var fixedFlow= new Array();
 
-for (i in flows){
+for (i in flows) {
       scrIPArr[i]=flows[i].sip;
       destIPArr[i]=flows[i].dip;
       destPortArr[i]=flows[i].dport;
-      packArr[i]=flows[i].packets;
-      fixedFlow[i]=flowing(scrIPArr[i], destIPArr[i], destPortArr[i], packArr[i]);
+      fixedFlow[i]=flowing(scrIPArr[i], destIPArr[i], destPortArr[i]);
 }
 
 //filters repetitions
@@ -178,15 +155,11 @@ destPortArr= destPortArr.filter( function( item, index, inputArray ) {
         return inputArray.indexOf(item) == index;
     });
 
-packArr= packArr.filter( function( item, index, inputArray ) {
-        return inputArray.indexOf(item) == index;
-    });
-
-        return [fixedFlow, scrIPArr, destIPArr, destPortArr, packArr];
+        return [fixedFlow, scrIPArr, destIPArr, destPortArr];
     }
 
 
-    function textRange(x, y, f, text){
+    function textRange(x, y, f, text) {
 
         text1 = document.createElement('div');
         text1.style.position = 'absolute';
@@ -227,20 +200,20 @@ function intToIP(int) {
 
 function getMaxOfArray(list) {
     res=new Array();
-    for(var i=0; i<list.length;i++){
+    for(var i=0; i<list.length;i++) {
         res[i]=ipToInt(list[i]);
     }
   return Math.max.apply(null, res);
 }
 
-function sortIP(list){
+function sortIP(list) {
     res=new Array();
-    for(var i=0; i<list.length;i++){
+    for(var i=0; i<list.length;i++) {
         res[i]=ipToInt(list[i]);
     }
 
     res.sort(function(a, b){return b-a});
-    for(var j=0; j<list.length;j++){
+    for(var j=0; j<list.length;j++) {
         res[i]=intToIP(res[i]);
     }
     return res;
@@ -248,18 +221,18 @@ function sortIP(list){
 
 //transform one range for another for mouse coordinates
 //there have to be 2 transform
-function transformX(x){
+function transformX(x) {
     return ( (x - 50)*(8/1618) - 4);
 }
 
-function transformY(y){
+function transformY(y) {
     return -1*( (y - 76)*(5.6/329) - 2.7);
 }
 
-function boldLines(x, y, list, constX){
+function boldLines(x, y, list, constX) {
 
-    for(var i=0; i<list.length; i++){
-        if((x==constX) && (y==list[i])){
+    for(var i=0; i<list.length; i++) {
+        if((x==constX) && (y==list[i])) {
             console.log("good");
         }
     }
@@ -274,7 +247,7 @@ var mouse = new THREE.Vector2();
 
 
             var renderer = new THREE.WebGLRenderer();
-            renderer.setSize( 1700, 900 );
+            renderer.setSize(window.innerWidth-30, window.innerHeight-30);
             document.body.appendChild( renderer.domElement );
 
             var scene = new THREE.Scene();
@@ -286,17 +259,18 @@ var mouse = new THREE.Vector2();
                 10000           // Far plane
             );
             camera.position.set( 0, 0, 10 );
+            //camera.position.z=10;
                       // camera.position.set( 20, 21, 0 );
 
             camera.lookAt( scene.position );
 
 //===================================CANVAS=================================================
     //Manage the material of the lines
-    var material = new THREE.LineBasicMaterial({
+    var material = new THREE.LineBasicMaterial( {
         color: 0xffbb33 , linewidth: 10
     });
 
-    var material2 = new THREE.LineBasicMaterial({
+    var material2 = new THREE.LineBasicMaterial( {
         linewidth: 2, color: 0xffbb33, vertexColors: THREE.VertexColors
     });
 
@@ -310,15 +284,9 @@ var mouse = new THREE.Vector2();
        line.addEventListener()
           //PermanentLine2
        var geometry2 = new THREE.Geometry();
-            geometry2.vertices.push(new THREE.Vector3(-1.5,2.80,0))
-            geometry2.vertices.push(new THREE.Vector3(-1.5,-2.50,0))
+            geometry2.vertices.push(new THREE.Vector3(0,2.80,0))
+            geometry2.vertices.push(new THREE.Vector3(0,-2.50,0))
        var line2 = new THREE.Line(geometry2, material);
-
-          //PermanentLine3
-       var geometry3 = new THREE.Geometry();
-            geometry3.vertices.push(new THREE.Vector3(1.5,2.80,0))
-            geometry3.vertices.push(new THREE.Vector3(1.5,-2.50,0))
-       var line3 = new THREE.Line(geometry3, material);
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MODIFYIER<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -341,12 +309,12 @@ var scrIP = new HashTable();
 var scrIPY=[scrIPList.length];
 var offset1=((10.5/scrIPList.length)/2);
 var res=2.8;
-for(var i=0; i<scrIPList.length;i++){
+for(var i=0; i<scrIPList.length;i++) {
     res-=offset1;
     scrIPY[i]=res;
 }
 
-for(var i=0; i<scrIPList.length; i++){
+for(var i=0; i<scrIPList.length; i++) {
     scrIP.setItem(scrIPList[i], scrIPY[i]);
     console.log(scrIPY[i]);
 }
@@ -359,12 +327,12 @@ var destIP = new HashTable();
 var destIPY=[destIPList.length];
 var offset2=((10.5/destIPList.length)/2);
 var res=2.8;
-for(var i=0; i<destIPList.length;i++){
+for(var i=0; i<destIPList.length;i++) {
     res-=offset2;
     destIPY[i]=res;
 }
 
-for(var i=0; i<destIPList.length; i++){
+for(var i=0; i<destIPList.length; i++) {
     destIP.setItem(destIPList[i], destIPY[i]);
 }
 
@@ -375,30 +343,13 @@ var destPort = new HashTable();
 var destPortY=[destPortList.length];
 var offset3=((10.5/destPortList.length)/2);
 var res=2.8;
-for(var i=0; i<destPortList.length;i++){
+for(var i=0; i<destPortList.length;i++) {
     res-=offset3;
     destPortY[i]=res;
 }
 
-for(var i=0; i<destPortList.length; i++){
+for(var i=0; i<destPortList.length; i++) {
     destPort.setItem(destPortList[i], destPortY[i]);
-}
-
-var packList=flowResult[4];
-
-packList.sort(function(a, b){return b-a});
-var pack = new HashTable();
-var packY=[packList.length];
-var offset4=((10.5/packList.length)/2);
-var res=2.8;
-for(var i=0; i<packList.length;i++){
-    res-=offset4;
-    packY[i]=res;
-}
-
-for(var i=0; i<packList.length; i++){
-    pack.setItem(packList[i], packY[i]);
-    console.log(packY[i]);
 }
 
 
@@ -407,42 +358,37 @@ for(var i=0; i<packList.length; i++){
          var input=flowResult[0];
         //iterates per flow
         //NEED: total number of flows
-         for(var i=0; i<data.length; i++){
+         for(var i=0; i<data.length; i++) {
         //function call
-            result =Lines(material2, input[i], scrIP, destIP, destPort, pack);
-            var lineClone= result.clone();
+            result =Lines(material2, input[i], scrIP, destIP, destPort);
 
         //adds the line to the scene
            scene.add(result);
         }
+//for(var i=0; i<destPortList.length;i++)
 
        //Adds the permanent lines
         scene.add(line);
         scene.add(line2);
-        scene.add(line3);
 
         //text performance
-    document.body.appendChild(textRange(47, 30, 20, scrIPList[0]));//ScrIP max
-    document.body.appendChild(textRange(47, 830, 20, scrIPList[scrIPList.length-1]));//ScrIP min
+    document.body.appendChild(textRange(window.innerWidth-(window.innerWidth-47), window.innerHeight-(window.innerHeight-30), 20, scrIPList[0]));//ScrIP max
+    document.body.appendChild(textRange(window.innerWidth-(window.innerWidth-47), window.innerHeight-100, 20, scrIPList[scrIPList.length-1]));//ScrIP min
 
-    document.body.appendChild(textRange(480, 30, 20, destIPList[0]));//destIP max
-    document.body.appendChild(textRange(490, 830, 20, destIPList[destIPList.length-1]));//destIP min
+    document.body.appendChild(textRange(window.innerWidth-((window.innerWidth/2)+70), window.innerHeight-(window.innerHeight-30), 20, destIPList[0]));//destIP max
+    document.body.appendChild(textRange(window.innerWidth-((window.innerWidth/2)+70), window.innerHeight-100, 20, destIPList[destIPList.length-1]));//destIP min
 
-    document.body.appendChild(textRange(1135, 30, 20, destPortList[0]));//destPort max
-    document.body.appendChild(textRange(1135, 830, 20, destPortList[destPortList.length-1]));//destPort min
+    document.body.appendChild(textRange(window.innerWidth-120, window.innerHeight-(window.innerHeight-30), 20, destPortList[0]));//destPort max
+    document.body.appendChild(textRange(window.innerWidth-120, window.innerHeight-100, 20, destPortList[destPortList.length-1]));//destPort min
 
-    document.body.appendChild(textRange(1645, 30, 20, packList[0]));//packets max
-    document.body.appendChild(textRange(1645, 830, 20, packList[packList.length-1]));//packets min
+    document.body.appendChild(textRange(window.innerWidth-(window.innerWidth-47), window.innerHeight-80, 20, "source IP address"));//ScrIP label
+    document.body.appendChild(textRange(window.innerWidth-((window.innerWidth/2+100)), window.innerHeight-80, 20, "destination IP address"));//destIP label
+    document.body.appendChild(textRange(window.innerWidth-200, window.innerHeight-80, 20, "destination Port"));//destPort label
 
-    document.body.appendChild(textRange(45, 870, 20, "source IP address"));//ScrIP
-    document.body.appendChild(textRange(480, 870, 20, "destination IP address"));//destIP
-    document.body.appendChild(textRange(1100, 870, 20, "destination Port"));//destPort
-    document.body.appendChild(textRange(1550, 870, 20, "Packet length"));//packets
-
-    document.body.appendChild(textRange(7, 35, 20, "Max"));//right min
-    document.body.appendChild(textRange(7, 830, 20, "Min"));//right max
-    document.body.appendChild(textRange(1670, 35, 20, "Max"));//left min
-    document.body.appendChild(textRange(1670, 830, 20, "Min"));//left max
+    document.body.appendChild(textRange(window.innerWidth-(window.innerWidth-7), window.innerHeight-(window.innerHeight-35), 20, "Max"));//left max
+    document.body.appendChild(textRange(window.innerWidth-(window.innerWidth-7), window.innerHeight-105, 20, "Min"));//left min
+    document.body.appendChild(textRange(window.innerWidth-50, window.innerHeight-(window.innerHeight-35), 20, "Max"));//right max
+    document.body.appendChild(textRange(window.innerWidth-50, window.innerHeight-105, 20, "Min"));//right min
 
 
 //===================================CODE HERE =======================================
@@ -464,12 +410,11 @@ var raycater,parentTransform;
     var objects =raycaster.intersectObjects(scene.children);
     for(var i=0; i<objects.length;i++)*/
 
+
+
      window.onMouseClick= function(event) {
-        event.preventDefault();
-        raycaster.setFromCamera( mouse, camera );
     // calculate mouse position in normalized device coordinates
     // (-1 to +1) for both components
-    //problema con transformed--> cuando la pantalla cambia de tamaño (se minimiza) los puntos cambian completamente
     mouse.x = ( ( event.clientX - renderer.domElement.offsetLeft ) / renderer.domElement.width ) * 2 - 1;
     mouse.y = - ( ( event.clientY - renderer.domElement.offsetTop ) / renderer.domElement.height ) * 2 + 1;
     console.log("transformed X => "+(mouse.x)*(8/1.901176470588235));
@@ -477,15 +422,9 @@ var raycater,parentTransform;
     var x=mouse.x*(8/1.901176470588235);
     var y=mouse.y*((8.8/1.693333333333333)-1.63);
 
-                var intersects = raycaster.intersectObjects(lines);
-                if ( intersects.length > 0 ) {
-                    console.log("Esto es intersects = "+intersects.length);
-                    console.log("YES");
-                }
 
-
-    //mouse onclick con el bloque 20x1000px
-      window.onclick = function(e){
+    //mouse onclick
+       /* window.onclick = function(e){
 
            //var evt = window.event || e;
 
@@ -499,27 +438,26 @@ var raycater,parentTransform;
             d.style.left = (e.clientX - 10)+ "px";
             d.style.top = (e.clientY-10)+ "px";
             d.style.width="20px";
-            d.style.height="1000px";
+            d.style.height="100000px";
             d.style.cursor = "pointer";
            // d.style.backgroundColor="black"
            document.body.appendChild(d);
-
+           */
            //using raycaster
-           for(var i=0; i<scrIPList.length ;i++){
+           for(var i=0; i<scrIPList.length ;i++) {
             //console.log("Los ips: "+scrIPY[i]);
-            var done=scrIPY[i];
+           var done=scrIPY[i];
+         //  if((x<-4+0.09  && x>-4-0.09) && (y<done+0.09  && y>done-0.09)){
+            if((x<-4+0.09  && x>-4-0.01) && (y<(done+0.09)  && y>(done-0.09))) {
+                console.log("x: "+x);
+                console.log("y: "+y);
+                console.log("done para y: "+done);
+                console.log("GUT!!!1");
 
-                 //if((x<-4+0.09  && x>-4-0.09) && (y<done+0.09  && y>done-0.09)){
-                    if((x<-4+0.09  && x>-4-0.01) && (y<(done+0.09)  && y>(done-0.09))){
-                //if((x<-4+0.09  && x>-4-0.01)){
-                    console.log("x: "+x);
-                    console.log("y: "+y);
-                    console.log("done para y: "+done);
-                    console.log("GUT!!!1");
-                }
             }
         }
-           }
+
+       }
 
             var light = new THREE.PointLight( 0xFFFF00 );
             light.position.set( 10, 0, 10 );
@@ -528,11 +466,6 @@ var raycater,parentTransform;
             renderer.setClearColor( 0xffffff, 1);
             renderer.render( scene, camera );
             window.addEventListener( 'mousedown', onMouseClick, false );
-            //scene.add( parentTransform );
+        //    scene.add( parentTransform );
 
         };
-        </script>
-
-    </body>
-
-    </html>
