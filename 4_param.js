@@ -440,7 +440,11 @@ for(let i = 0; i < packList.length; i++) {
 for(let i = 0; i < packList.length; i++) {
   // once sorted each element in the packet length list is given a unique y coordinate
   pack.setItem(packList[i], packY[i]);
+  console.log("packet: " + packList[i]);
 }
+
+
+
 
 // holds the result of the function call
 var result;
